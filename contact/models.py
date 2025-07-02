@@ -7,7 +7,7 @@ class Contact(models.Model):
     email = models.EmailField()         # ✅ lowercase
     mobile = models.CharField(max_length=12)
     message = models.TextField()
-    whatsapp = models.CharField(max_length=15, null=True, blank=True)  # ✅ optional field
+    whatsapp = models.CharField(max_length=15)  # ✅ optional field
 
 
 
