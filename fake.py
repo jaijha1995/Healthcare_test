@@ -1,48 +1,40 @@
 # If running as a standalone script, uncomment the lines below:
 import os
 import django
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "restserver.settings")  # Replace with your actual project name
 django.setup()
 
-from customer.models import Customer
-from superadmin.models import SuperAdmin
+from contact.models import Contact  # ✅ Assuming app name is `contact`
 from faker import Faker
 import random
-from tqdm import tqdm  # Optional: progress bar
+from tqdm import tqdm
 
 fake = Faker()
 
-# Get SuperAdmin instance
-superadmin = SuperAdmin.objects.first()
-if not superadmin:
-    raise Exception("❌ No SuperAdmin found. Please create one before running this script.")
-
-# Config for next 50,000 records (from 50,000 to 100,000)
-start = 50000
-end = 100000
+# ✅ Config
+total_records = 100000
 batch_size = 1000
 
-for i in tqdm(range(start, end, batch_size), desc="Creating customers"):
-    customers = []
+print("🚀 Creating fake contact records...")
+
+for i in tqdm(range(0, total_records, batch_size), desc="Creating contacts"):
+    contacts = []
     for _ in range(batch_size):
-        first_name = fake.first_name()
-        last_name = fake.last_name()
+        name = fake.name()
         email = fake.unique.email()
         mobile = fake.unique.msisdn()[0:10]
-        password = fake.password(length=10)
-        otp = str(random.randint(100000, 999999))
+        message = fake.paragraph(nb_sentences=3)
 
-        customers.append(Customer(
-            superadmin=superadmin,
-            name=first_name,
-            last_name=last_name,
+        contacts.append(Contact(
+            name=name,
             email=email,
             mobile=mobile,
-            password=password,
-            otp=otp,
-            role="Customer"
+            message=message
         ))
 
-    Customer.objects.bulk_create(customers, batch_size)
 
-print("✅ Customers 50,000 to 100,000 created successfully.")
+
+    Contact.objects.bulk_create(contacts, batch_size=batch_size)
+
+print("✅ 50,000 contacts created successfully.")

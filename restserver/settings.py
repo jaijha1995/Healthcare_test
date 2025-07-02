@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'corsheaders',  # For handling CORS
     'superadmin',  # Your app for superadmin functionalities
     'customer',  # Your app for customer functionalities
+    'contact'
 ]
 
 MIDDLEWARE = [
