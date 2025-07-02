@@ -4,10 +4,10 @@ from django.db import models
 
 class Contact(models.Model):
     name = models.CharField(max_length=255)
-    email = models.EmailField()         # ✅ lowercase
+    email = models.EmailField()
     mobile = models.CharField(max_length=12)
     message = models.TextField()
-    whatsapp = models.CharField(max_length=15)  # ✅ optional field
+    whatsapp = models.CharField(max_length=15)
 
 
 
