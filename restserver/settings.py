@@ -86,10 +86,10 @@ WSGI_APPLICATION = 'restserver.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'healthcare_db',  # Replace with your database name
-        'USER': 'postgres',
+        'NAME': 'healthcare',  # Replace with your database name
+        'USER': 'skylabs',
         'PASSWORD': '140806',
-        'HOST': 'localhost',
+        'HOST': '143.110.242.217',
         'PORT': '5432',
     }
 }
