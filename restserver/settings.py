@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'corsheaders',  # For handling CORS
     'superadmin',  # Your app for superadmin functionalities
     'customer',  # Your app for customer functionalities
-    'contact'
+    'contact',
+    'Product'
 ]
 
 MIDDLEWARE = [
@@ -222,3 +223,23 @@ REST_FRAMEWORK = {
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ),
 }
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',  # Use Redis backend in prod
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+

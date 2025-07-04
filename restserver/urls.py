@@ -25,6 +25,7 @@ urlpatterns = [
     path('api/superadmin/', include('superadmin.urls')),
     path('api/customer/', include('customer.urls')),
     path('api/contact/', include('contact.urls')),
+    path('api/product/', include('Product.urls')),
 ]
 
 if settings.DEBUG:
