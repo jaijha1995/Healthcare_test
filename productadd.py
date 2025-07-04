@@ -13,7 +13,7 @@ from virtual_model.models import Category, SubCategory, SubSubCategory  # Replac
 
 # ✅ Configuration
 fake = Faker()
-RECORDS_PER_TYPE = 1000  # Adjust as needed
+RECORDS_PER_TYPE = 100000 # Adjust as needed
 
 def insert_fake_data(model, type_value, total):
     print(f"🔄 Inserting {total} records into {type_value}...")
