@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'superadmin',  # Your app for superadmin functionalities
     'customer',  # Your app for customer functionalities
     'contact',
-    'Product'
+    'Product',
+    'virtual_model'
 ]
 
 MIDDLEWARE = [

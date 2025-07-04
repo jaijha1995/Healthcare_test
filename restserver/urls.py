@@ -26,6 +26,7 @@ urlpatterns = [
     path('api/customer/', include('customer.urls')),
     path('api/contact/', include('contact.urls')),
     path('api/product/', include('Product.urls')),
+    path('api/virtual_model/', include('virtual_model.urls')),
 ]
 
 if settings.DEBUG:

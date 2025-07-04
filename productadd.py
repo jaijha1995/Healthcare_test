@@ -1,72 +1,40 @@
 import os
 import django
+from faker import Faker
+from tqdm import tqdm
 
 # ✅ Setup Django environment
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "restserver.settings")  # Replace with your actual settings module
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "restserver.settings")  # Replace with your Django project settings
 django.setup()
 
-from Product.models import Product  # Update with your actual app name if different
-from faker import Faker
-import random
-from tqdm import tqdm
-from decimal import Decimal
+from virtual_model.models import Category, SubCategory, SubSubCategory  # Replace with your actual app name
 
+# ✅ Configurations
+TOTAL_PER_TYPE = 1000  # You can increase this if needed
 fake = Faker()
 
-# ✅ Configuration
-total_records = 1000000  # 10 lakh
-batch_size = 1000
+def create_fake_entries(model_class, type_name, total):
+    print(f"🚀 Creating {total} fake records for: {type_name}")
+    from django.db import transaction
 
-PRODUCT_TYPE_CHOICES = [
-    "TOP_RATED",
-    "NEW_ARRIVALS",
-    "BEST_SELLERS",
-    "Most Popular Products",
-    "Trending Products",
-]
+    with transaction.atomic():
+        for _ in tqdm(range(total), desc=f"Seeding {type_name}"):
+            model_class.objects.create(
+                name=fake.unique.word().capitalize(),
+                type=type_name
+            )
 
-SECTIONS = ['Men', 'Women', 'Kids', 'Accessories', 'Footwear']
-GENDERS = ['male', 'female', 'unisex']
+def run_seed():
+    # Delete existing data if needed
+    print("🧹 Clearing existing Category data...")
+    Category.objects.all().delete()
 
-print("🚀 Creating 10 lakh fake product records...")
+    # Insert fake data into all 3 types
+    create_fake_entries(Category, "category", TOTAL_PER_TYPE)
+    create_fake_entries(SubCategory, "subcategory", TOTAL_PER_TYPE)
+    create_fake_entries(SubSubCategory, "subsubcategory", TOTAL_PER_TYPE)
 
-for i in tqdm(range(0, total_records, batch_size), desc="Inserting Products"):
-    products = []
-    for _ in range(batch_size):
-        title_types = random.choice(PRODUCT_TYPE_CHOICES)
-        # ✅ Safe and unique-like name generation
-        name = f"{fake.word().capitalize()} {fake.word().capitalize()} {random.randint(1000, 999999)}"
-        description = fake.paragraph(nb_sentences=5)
-        price = Decimal(random.uniform(10.0, 999.99)).quantize(Decimal('0.01'))
-        in_stock = fake.boolean(chance_of_getting_true=80)
-        gender = random.choice(GENDERS)
-        image = fake.image_url()
-        model_3d = fake.url()
-        size_tags = {
-            "sizes": random.sample(["XS", "S", "M", "L", "XL"], k=random.randint(1, 5))
-        }
-        is_active = fake.boolean(chance_of_getting_true=95)
-        dfx_content = {
-            "colors": random.sample(["red", "blue", "green", "black", "white"], k=random.randint(1, 3))
-        }
-        section = random.choice(SECTIONS)
+    print("✅ All fake categories created successfully.")
 
-        products.append(Product(
-            title_types=title_types,
-            name=name,
-            description=description,
-            price=price,
-            in_stock=in_stock,
-            gender=gender,
-            image=image,
-            model_3d=model_3d,
-            size_tags=size_tags,
-            is_active=is_active,
-            dfx_content=dfx_content,
-            section=section
-        ))
-
-    # ✅ Batch insert
-    Product.objects.bulk_create(products, batch_size=batch_size)
-
-print("✅ 10 lakh product records created successfully.")
+if __name__ == "__main__":
+    run_seed()
