@@ -1,40 +1,41 @@
 import os
 import django
+import random
 from faker import Faker
 from tqdm import tqdm
 
 # ✅ Setup Django environment
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "restserver.settings")  # Replace with your Django project settings
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "restserver.settings")  # Replace with your actual settings
 django.setup()
 
-from virtual_model.models import Category, SubCategory, SubSubCategory  # Replace with your actual app name
+# ✅ Import your models (Update `yourapp` to your real app name)
+from virtual_model.models import Category, SubCategory, SubSubCategory  # Replace 'yourapp' with your app name
 
-# ✅ Configurations
-TOTAL_PER_TYPE = 1000  # You can increase this if needed
+# ✅ Configuration
 fake = Faker()
+RECORDS_PER_TYPE = 1000  # Adjust as needed
 
-def create_fake_entries(model_class, type_name, total):
-    print(f"🚀 Creating {total} fake records for: {type_name}")
+def insert_fake_data(model, type_value, total):
+    print(f"🔄 Inserting {total} records into {type_value}...")
+
     from django.db import transaction
-
     with transaction.atomic():
-        for _ in tqdm(range(total), desc=f"Seeding {type_name}"):
-            model_class.objects.create(
-                name=fake.unique.word().capitalize(),
-                type=type_name
+        for _ in tqdm(range(total), desc=f"Seeding {type_value}"):
+            name = f"{fake.word().capitalize()}_{random.randint(1000, 9999)}"
+            model.objects.create(
+                name=name,
+                type=type_value
             )
 
-def run_seed():
-    # Delete existing data if needed
-    print("🧹 Clearing existing Category data...")
+def run():
+    print("🧹 Deleting existing data in Category table...")
     Category.objects.all().delete()
 
-    # Insert fake data into all 3 types
-    create_fake_entries(Category, "category", TOTAL_PER_TYPE)
-    create_fake_entries(SubCategory, "subcategory", TOTAL_PER_TYPE)
-    create_fake_entries(SubSubCategory, "subsubcategory", TOTAL_PER_TYPE)
+    insert_fake_data(Category, 'category', RECORDS_PER_TYPE)
+    insert_fake_data(SubCategory, 'subcategory', RECORDS_PER_TYPE)
+    insert_fake_data(SubSubCategory, 'subsubcategory', RECORDS_PER_TYPE)
 
-    print("✅ All fake categories created successfully.")
+    print("✅ Fake data inserted successfully into Category table.")
 
 if __name__ == "__main__":
-    run_seed()
+    run()
