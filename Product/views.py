@@ -24,7 +24,7 @@ class productAPIView(APIView):
             if product_obj:
                 serializer = ProductSerializer(product_obj)
                 data = {"status": "success", "data": serializer.data}
-                cache.set(cache_key, data, timeout=60 * 5)  # Cache for 5 min
+                cache.set(cache_key, data, timeout=60 * 60 * 24)  # Cache for 24 Hrs
                 return Response(data, status=status.HTTP_200_OK)
             else:
                 return Response({"status": "error", "message": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
