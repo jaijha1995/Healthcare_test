@@ -40,6 +40,14 @@ class Order(models.Model):
             models.Index(fields=['order_date']),
             models.Index(fields=['order_status']),
             models.Index(fields=['total_amount']),
+            models.Index(fields=['customer']),
+            models.Index(fields=['superadmin']),
+            models.Index(fields=['candidate']),
+            models.Index(fields=['contact']),
+            models.Index(fields=['product']),
+            models.Index(fields=['category']),
+            models.Index(fields=['subcategory']),
+            models.Index(fields=['subsubcategory']),
         ]
 
     def __str__(self):
