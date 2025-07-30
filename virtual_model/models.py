@@ -13,7 +13,8 @@ class Category(models.Model):
     def __str__(self):
         return f"{self.type} - {self.name}"
 
-# Virtual/Proxy model for Sub Category
+
+
 class SubCategory(Category):
     class Meta:
         proxy = True

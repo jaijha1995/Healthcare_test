@@ -4,16 +4,14 @@ import random
 from faker import Faker
 from tqdm import tqdm
 
-# ✅ Setup Django environment
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "restserver.settings")  # Replace with your actual settings
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "restserver.settings")
 django.setup()
 
-# ✅ Import your models (Update `yourapp` to your real app name)
-from virtual_model.models import Category, SubCategory, SubSubCategory  # Replace 'yourapp' with your app name
+from virtual_model.models import Category, SubCategory, SubSubCategory
 
-# ✅ Configuration
+
 fake = Faker()
-RECORDS_PER_TYPE = 100000 # Adjust as needed
+RECORDS_PER_TYPE = 10000
 
 def insert_fake_data(model, type_value, total):
     print(f"🔄 Inserting {total} records into {type_value}...")

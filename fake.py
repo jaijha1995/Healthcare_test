@@ -13,7 +13,7 @@ from tqdm import tqdm
 fake = Faker()
 
 # ✅ Config
-total_records = 100000
+total_records = 1000000
 batch_size = 1000
 
 print("🚀 Creating fake contact records...")

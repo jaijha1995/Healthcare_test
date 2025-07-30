@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'customer',  # Your app for customer functionalities
     'contact',
     'Product',
-    'virtual_model'
+    'virtual_model',
+    'master_com'
 ]
 
 MIDDLEWARE = [
