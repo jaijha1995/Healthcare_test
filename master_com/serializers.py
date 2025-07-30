@@ -36,18 +36,13 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        #fields = '__all__'
         fields = [
             'id',
             'order_date',
             'order_status',
             'total_amount',
-
-            # Read-only nested fields
             'customer', 'superadmin', 'candidate',
             'contact', 'product', 'category', 'subcategory', 'subsubcategory',
-
-            # Write-only input fields
             'customer_id', 'superadmin_id', 'candidate_id',
             'contact_id', 'product_id', 'category_id',
             'subcategory_id', 'subsubcategory_id'
@@ -55,7 +50,6 @@ class OrderSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'order_date']
 
     def create(self, validated_data):
-        # Extract FK ids
         customer = validated_data.pop('customer_id')
         superadmin = validated_data.pop('superadmin_id')
         candidate = validated_data.pop('candidate_id')
@@ -65,7 +59,6 @@ class OrderSerializer(serializers.ModelSerializer):
         subcategory = validated_data.pop('subcategory_id')
         subsubcategory = validated_data.pop('subsubcategory_id')
 
-        # Create Order with all FKs
         order = Order.objects.create(
             customer=customer,
             superadmin=superadmin,
@@ -80,7 +73,6 @@ class OrderSerializer(serializers.ModelSerializer):
         return order
 
     def update(self, instance, validated_data):
-        # Update FK fields manually
         instance.customer = validated_data.pop('customer_id', instance.customer)
         instance.superadmin = validated_data.pop('superadmin_id', instance.superadmin)
         instance.candidate = validated_data.pop('candidate_id', instance.candidate)
@@ -89,8 +81,7 @@ class OrderSerializer(serializers.ModelSerializer):
         instance.category = validated_data.pop('category_id', instance.category)
         instance.subcategory = validated_data.pop('subcategory_id', instance.subcategory)
         instance.subsubcategory = validated_data.pop('subsubcategory_id', instance.subsubcategory)
-
-        # Other fields
+        
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
 
